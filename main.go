@@ -61,7 +61,7 @@ func serveRSS(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		mysqlErr, ok := err.(*mysql.MySQLError)
 		if !ok {
-			logger.Error.Printf("err.(MySQLError): could not cast")
+			logger.Error.Printf("err.(MySQLError): could not cast: %s", err)
 			http.Error(w, "Cast exception", http.StatusInternalServerError)
 			return
 		}
@@ -105,6 +105,8 @@ func serveRSS(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	flag.Parse()
+
 	router := mux.NewRouter()
 	router.HandleFunc("/{ident}.rss", serveRSS)
 	logger.Error.Fatal(http.ListenAndServe(*Listen, handlers.CombinedLoggingHandler(os.Stdout, router)))
