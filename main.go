@@ -56,7 +56,7 @@ func serveRSS(w http.ResponseWriter, r *http.Request) {
 		limit = 50
 	}
 
-	query := fmt.Sprintf("SELECT url, title, added FROM `%s` ORDER BY id DESC LIMIT %d", ident, limit)
+	query := fmt.Sprintf("SELECT url, title, added FROM `%s` WHERE queue = 'PROCESSED' ORDER BY id DESC LIMIT %d", ident, limit)
 	rows, err := db.Query(query)
 	if err != nil {
 		mysqlErr, ok := err.(*mysql.MySQLError)
